@@ -1,17 +1,20 @@
 <?php
 
-namespace Graze\ArrayFilter\Test\Unit;
+namespace Graze\ArrayFilter\Test\Unit\Factory;
 
+use Graze\ArrayFilter\ArrayFilterInterface;
+use Graze\ArrayFilter\Exception\UnknownPropertyDefinitionException;
+use Graze\ArrayFilter\Factory\FilterFactory;
+use Graze\ArrayFilter\Factory\FilterFactoryInterface;
+use Graze\ArrayFilter\Factory\ValueFactoryInterface;
 use Graze\ArrayFilter\Test\TestCase;
-use Graze\ArrayFilter\ArrayFilterFactory;
-use Graze\ArrayFilter\ValueFactoryInterface;
 use Mockery as m;
 use Mockery\MockInterface;
 
-class ArrayFilterFactoryTest extends TestCase
+class FilterFactoryTest extends TestCase
 {
     /**
-     * @var ArrayFilterFactory
+     * @var FilterFactory
      */
     protected $factory;
 
@@ -23,26 +26,26 @@ class ArrayFilterFactoryTest extends TestCase
     public function setUp()
     {
         $this->valueFactory = m::mock(ValueFactoryInterface::class);
-        $this->factory      = new ArrayFilterFactory($this->valueFactory);
+        $this->factory = new FilterFactory($this->valueFactory);
     }
 
     public function testInstanceOf()
     {
         static::assertInstanceOf(
-            'Graze\ArrayFilter\ArrayFilterFactoryInterface',
+            FilterFactoryInterface::class,
             $this->factory
         );
     }
 
     /**
-     * @dataProvider createFilterData
+     * @dataProvider getFilterData
      *
      * @param string $property
      * @param mixed  $expected
      * @param array  $metadata
      * @param bool   $result
      */
-    public function testCreateFilter($property, $expected, $metadata, $result)
+    public function testGetFilter($property, $expected, $metadata, $result)
     {
         if (is_string($expected)) {
             $this->valueFactory->shouldReceive('parseValue')
@@ -51,7 +54,7 @@ class ArrayFilterFactoryTest extends TestCase
                                ->andReturn($expected);
         }
 
-        $filter = $this->factory->createFilter($property, $expected);
+        $filter = $this->factory->getFilter($property, $expected);
         static::assertEquals(
             $result,
             $filter->matches($metadata),
@@ -68,7 +71,7 @@ class ArrayFilterFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createFilterData()
+    public function getFilterData()
     {
         return [
             ['test', 'value', ['test' => 'value'], true],
@@ -106,14 +109,14 @@ class ArrayFilterFactoryTest extends TestCase
      *
      * @param string $property
      */
-    public function testCreateFilterWillThrowExceptionWithInvalidProperty($property)
+    public function testGetFilterWillThrowExceptionWithInvalidProperty($property)
     {
         static::setExpectedException(
-            'Graze\ArrayFilter\Exception\UnknownPropertyDefinitionException',
+            UnknownPropertyDefinitionException::class,
             "Unknown property definition: $property"
         );
 
-        $this->factory->createFilter($property, '');
+        $this->factory->getFilter($property, '');
     }
 
     /**
@@ -173,5 +176,20 @@ class ArrayFilterFactoryTest extends TestCase
             [['test >' => 4, 'test <' => 8], ['test' => 6], true],
             [['test >' => 4, 'test <' => 8], ['test' => 2], false],
         ];
+    }
+
+    public function testStaticAccessors()
+    {
+        $filter = FilterFactory::filter('name', 'value');
+        static::assertInstanceOf(ArrayFilterInterface::class, $filter);
+        static::assertTrue($filter->matches(['name' => 'value']));
+        static::assertFalse($filter->matches(['name' => 'value2']));
+
+        $filter = FilterFactory::fromConfiguration([
+            'name' => 'value2',
+        ]);
+        static::assertInstanceOf(ArrayFilterInterface::class, $filter);
+        static::assertTrue($filter->matches(['name' => 'value2']));
+        static::assertFalse($filter->matches(['name' => 'value3']));
     }
 }

@@ -19,7 +19,7 @@ $ composer require graze/array-filter
 There is a factory which takes in a set of string definitions and creates filters based on each one
 
 ```php
-$filter = [
+$config = [
     'name ~' => '/test.*/i',
     'ctime >' => '{date:yesterday:U}',
     'status in' => [1, 2],
@@ -29,7 +29,8 @@ $input = [[
     'ctime' => 142353782,
     'status' => 2,
 ]];
-$filter = new ArrayFilterFactory($filter);
+$factory = new FilterFactory(new ValueFactory());
+$filter = $factory->createFilters($config);
 $filtered = array_filter($input, $filter);
 ```
 

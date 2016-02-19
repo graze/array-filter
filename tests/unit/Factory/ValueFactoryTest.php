@@ -1,10 +1,10 @@
 <?php
 
-namespace Graze\ArrayFilter\Test\Unit;
+namespace Graze\ArrayFilter\Test\Unit\Factory;
 
 use DateTime;
+use Graze\ArrayFilter\Factory\ValueFactory;
 use Graze\ArrayFilter\Test\TestCase;
-use Graze\ArrayFilter\ValueFactory;
 
 class ValueFactoryTest extends TestCase
 {
@@ -24,9 +24,9 @@ class ValueFactoryTest extends TestCase
 
     public function testADateBeingTheOnlyPropertyInAValueWillReturnADateObject()
     {
-        $value  = '{date:now}';
-        $date   = $this->factory->parseValue($value);
-        $now    = new DateTime();
+        $value = '{date:now}';
+        $date = $this->factory->parseValue($value);
+        $now = new DateTime();
         $result = new DateTime($date);
 
         static::assertInstanceOf('DateTimeInterface', $result);
@@ -36,8 +36,8 @@ class ValueFactoryTest extends TestCase
 
     public function testIntComparison()
     {
-        $value  = '{date:now:U}';
-        $time   = time();
+        $value = '{date:now:U}';
+        $time = time();
         $result = $this->factory->parseValue($value);
 
         static::assertGreaterThanOrEqual($time - 1, $result);
@@ -46,7 +46,7 @@ class ValueFactoryTest extends TestCase
 
     public function testADateBeingPartOfAPropertyWillReplaceWithADate()
     {
-        $value  = 'some {date:now} data';
+        $value = 'some {date:now} data';
         $result = $this->factory->parseValue($value);
 
         static::assertInternalType('string', $result);
@@ -55,7 +55,7 @@ class ValueFactoryTest extends TestCase
 
     public function testADateBeingPartOfAPropertyWillReplaceWithADateWithACustomFormat()
     {
-        $value  = 'some {date:now:Y-m-d} data';
+        $value = 'some {date:now:Y-m-d} data';
         $result = $this->factory->parseValue($value);
 
         static::assertInternalType('string', $result);
@@ -64,7 +64,7 @@ class ValueFactoryTest extends TestCase
 
     public function testAddingAMappingCanTriggerTheMapping()
     {
-        $value  = 'some {apid:123} here';
+        $value = 'some {apid:123} here';
         $result = $this->factory->parseValue($value);
 
         static::assertEquals($value, $result);

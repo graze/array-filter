@@ -1,6 +1,6 @@
 <?php
 
-namespace Graze\ArrayFilter;
+namespace Graze\ArrayFilter\Factory;
 
 use Closure;
 use DateTime;

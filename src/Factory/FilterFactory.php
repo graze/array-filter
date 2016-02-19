@@ -1,34 +1,33 @@
 <?php
 
-namespace Graze\ArrayFilter;
+namespace Graze\ArrayFilter\Factory;
 
+use Graze\ArrayFilter\AllOfFilter;
+use Graze\ArrayFilter\ArrayFilterInterface;
+use Graze\ArrayFilter\ClosureFilter;
 use Graze\ArrayFilter\Exception\UnknownPropertyDefinitionException;
 
 /**
- * Class ArrayFilterFactory
- *
  * Factory class to interpret string filter configuration into different configurations
  *
  * Currently supports:
  *
  * ```
  * [
- *     'param' => 'value',    // $metadata['param'] == 'value';
- *     'param =' => 'value',  // $metadata['param'] == 'value';
- *     'param ~' => 'value',  // preg_match($value, $metadata['param']);
- *     'param >' => 'value',  // $metadata['param'] > 'value';
- *     'param >=' => 'value', // $metadata['param'] >= 'value';
- *     'param <' => 'value',  // $metadata['param'] < 'value';
- *     'param <=' => 'value', // $metadata['param'] <= 'value';
- *     'param !=' => 'value', // $metadata['param'] != 'value';
- *     'param <>' => 'value', // $metadata['param'] != 'value';
- *     'param in' => ['value1','value2'], // in_array($metadata['param'], ['value1','value2'])
+ *     'param' => 'value',    // $data['param'] == 'value';
+ *     'param =' => 'value',  // $data['param'] == 'value';
+ *     'param ~' => 'value',  // preg_match($value, $data['param']);
+ *     'param >' => 'value',  // $data['param'] > 'value';
+ *     'param >=' => 'value', // $data['param'] >= 'value';
+ *     'param <' => 'value',  // $data['param'] < 'value';
+ *     'param <=' => 'value', // $data['param'] <= 'value';
+ *     'param !=' => 'value', // $data['param'] != 'value';
+ *     'param <>' => 'value', // $data['param'] != 'value';
+ *     'param in' => ['value1','value2'], // in_array($data['param'], ['value1','value2'])
  * ]
  * ```
- *
- * @package Graze\DataFlow\Node\File\MetadataFilter
  */
-class ArrayFilterFactory implements ArrayFilterFactoryInterface
+class FilterFactory implements FilterFactoryInterface
 {
     /**
      * @var array
@@ -41,6 +40,11 @@ class ArrayFilterFactory implements ArrayFilterFactoryInterface
     protected $valueFactory;
 
     /**
+     * @var FilterFactory
+     */
+    static private $instance = null;
+
+    /**
      * Build the definitions
      *
      * @param ValueFactoryInterface $valueFactory
@@ -48,7 +52,7 @@ class ArrayFilterFactory implements ArrayFilterFactoryInterface
     public function __construct(ValueFactoryInterface $valueFactory)
     {
         $this->valueFactory = $valueFactory;
-        $this->definitions  = [
+        $this->definitions = [
             '/^(\w+)(\s*=)?$/i'    => function ($property, $expected) {
                 return new ClosureFilter($property, function ($actual) use ($expected) {
                     return $actual == $expected;
@@ -101,8 +105,8 @@ class ArrayFilterFactory implements ArrayFilterFactoryInterface
     {
         $filters = [];
         foreach ($configuration as $property => $value) {
-            $expected  = is_string($value) ? $this->valueFactory->parseValue($value) : $value;
-            $filters[] = $this->createFilter($property, $expected);
+            $expected = is_string($value) ? $this->valueFactory->parseValue($value) : $value;
+            $filters[] = $this->getFilter($property, $expected);
         }
 
         return new AllOfFilter($filters);
@@ -115,7 +119,7 @@ class ArrayFilterFactory implements ArrayFilterFactoryInterface
      * @return ArrayFilterInterface
      * @throws UnknownPropertyDefinitionException
      */
-    public function createFilter($property, $value)
+    public function getFilter($property, $value)
     {
         foreach ($this->definitions as $key => $definition) {
             if (preg_match($key, $property, $matches)) {
@@ -125,5 +129,38 @@ class ArrayFilterFactory implements ArrayFilterFactoryInterface
         }
 
         throw new UnknownPropertyDefinitionException($property);
+    }
+
+    /**
+     * @param array $configuration
+     *
+     * @return ArrayFilterInterface
+     */
+    public static function fromConfiguration(array $configuration)
+    {
+        return static::getInstance()->createFilters($configuration);
+    }
+
+    /**
+     * @param string $property
+     * @param mixed  $value
+     *
+     * @return ArrayFilterInterface
+     * @throws UnknownPropertyDefinitionException
+     */
+    public static function filter($property, $value)
+    {
+        return static::getInstance()->getFilter($property, $value);
+    }
+
+    /**
+     * @return FilterFactory
+     */
+    private static function getInstance()
+    {
+        if (is_null(static::$instance)) {
+            static::$instance = new FilterFactory(new ValueFactory());
+        }
+        return static::$instance;
     }
 }
