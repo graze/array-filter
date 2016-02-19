@@ -138,7 +138,7 @@ class FilterFactory implements FilterFactoryInterface
      */
     public static function fromConfiguration(array $configuration)
     {
-        return static::getInstance()->createFilters($configuration);
+        return self::getInstance()->createFilters($configuration);
     }
 
     /**
@@ -150,7 +150,7 @@ class FilterFactory implements FilterFactoryInterface
      */
     public static function filter($property, $value)
     {
-        return static::getInstance()->getFilter($property, $value);
+        return self::getInstance()->getFilter($property, $value);
     }
 
     /**
@@ -158,9 +158,9 @@ class FilterFactory implements FilterFactoryInterface
      */
     private static function getInstance()
     {
-        if (is_null(static::$instance)) {
-            static::$instance = new FilterFactory(new ValueFactory());
+        if (is_null(self::$instance)) {
+            self::$instance = new FilterFactory(new ValueFactory());
         }
-        return static::$instance;
+        return self::$instance;
     }
 }

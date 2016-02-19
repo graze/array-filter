@@ -32,7 +32,7 @@ class ClosureFilterTest extends TestCase
         static::assertFalse($filter->matches(['invilad' => 'value']));
     }
 
-    public function testFilterCanBeInvoked()
+    public function testClosureFilterCanBeInvoked()
     {
         $filter = new ClosureFilter('test', function ($actual) {
             return $actual == 'value';

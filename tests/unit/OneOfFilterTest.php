@@ -14,7 +14,7 @@ class OneOfFilterTest extends TestCase
         static::assertInstanceOf('Graze\ArrayFilter\ArrayFilterInterface', $filter);
     }
 
-    public function testSingleChildConstructorEquals()
+    public function testSingleChildConstructorEqualsMatchesOne()
     {
         $filter = new OneOfFilter([
             new ClosureFilter('test', function ($actual) {
@@ -25,7 +25,7 @@ class OneOfFilterTest extends TestCase
         static::assertFalse($filter->matches(['test' => 'values']));
     }
 
-    public function testSingleChildAddedLaterEquals()
+    public function testSingleChildAddedLaterEqualsMatchesOne()
     {
         $filter = new OneOfFilter();
         $filter->addFilter(new ClosureFilter('test', function ($actual) {
@@ -35,7 +35,7 @@ class OneOfFilterTest extends TestCase
         static::assertFalse($filter->matches(['test' => 'values']));
     }
 
-    public function testMultipleChildrenWithDifferentProperties()
+    public function testMultipleChildrenWithDifferentPropertiesMatchesOne()
     {
         $filter = new OneOfFilter([
             new ClosureFilter('test', function ($actual) {
@@ -51,7 +51,7 @@ class OneOfFilterTest extends TestCase
         static::assertFalse($filter->matches(['test' => 'values', 'test2' => 'value3']));
     }
 
-    public function testMultipleChildrenWithTheSameProperty()
+    public function testMultipleChildrenWithTheSamePropertyMatchesOne()
     {
         $filter = new OneOfFilter([
             new ClosureFilter('test', function ($actual) {
@@ -66,7 +66,7 @@ class OneOfFilterTest extends TestCase
         static::assertTrue($filter->matches(['test' => 'bar']));
     }
 
-    public function testFilterCanBeInvoked()
+    public function testOneOfFilterCanBeInvoked()
     {
         $filter = new OneOfFilter([
             new ClosureFilter('test', function ($actual) {

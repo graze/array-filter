@@ -2,7 +2,14 @@
 
 <img align="right" src="https://media2.giphy.com/media/l41lOm4da1Avr5ui4/giphy.gif" width="250px" />
 
-File manipulation
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/graze/array-access.svg?style=flat-square)](https://packagist.org/packages/graze/array-access)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/graze/array-access/master.svg?style=flat-square)](https://travis-ci.org/graze/array-access)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/graze/array-access.svg?style=flat-square)](https://scrutinizer-ci.com/g/graze/array-access/code-structure)
+[![Quality Score](https://img.shields.io/scrutinizer/g/graze/array-access.svg?style=flat-square)](https://scrutinizer-ci.com/g/graze/array-access)
+[![Total Downloads](https://img.shields.io/packagist/dt/graze/array-access.svg?style=flat-square)](https://packagist.org/packages/graze/array-access)
+
+Array Filtering
 
 ## Install
 
