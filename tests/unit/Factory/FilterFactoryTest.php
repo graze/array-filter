@@ -111,10 +111,7 @@ class FilterFactoryTest extends TestCase
      */
     public function testGetFilterWillThrowExceptionWithInvalidProperty($property)
     {
-        static::setExpectedException(
-            UnknownPropertyDefinitionException::class,
-            "Unknown property definition: $property"
-        );
+        $this->expectException(UnknownPropertyDefinitionException::class);
 
         $this->factory->getFilter($property, '');
     }
