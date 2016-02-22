@@ -6,10 +6,10 @@ use Exception;
 
 class UnknownPropertyDefinitionException extends Exception
 {
-    public function __construct($property, $message = '', Exception $e = null)
+    public function __construct($property, $message = '', Exception $previous = null)
     {
         $message = "Unknown property definition: $property. " . $message;
 
-        parent::__construct($message, 0, $e);
+        parent::__construct($message, 0, $previous);
     }
 }

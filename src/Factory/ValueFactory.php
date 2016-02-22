@@ -16,7 +16,7 @@ class ValueFactory implements ValueFactoryInterface
     {
         $this->mappings = [
             '/(?<!:\{)\{date:([^\}:]+):?([^\}]+)?\}(?!:\})/i' => function ($matches) {
-                $dt     = new DateTime($matches[1]);
+                $dt = new DateTime($matches[1]);
                 $format = isset($matches[2]) ? $matches[2] : 'c';
                 return $dt->format($format);
             },
@@ -32,6 +32,8 @@ class ValueFactory implements ValueFactoryInterface
     public function addMapping($regex, $replace)
     {
         $this->mappings[$regex] = $replace;
+
+        return $this;
     }
 
     /**
