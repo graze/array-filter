@@ -1,12 +1,14 @@
 sudo: required
 
-language: generic
+language: php
 
 services:
   - docker
 
-script:
+before_script:
   - make install
+
+script:
   - make lint
   - make test-coverage-clover
 
