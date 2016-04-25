@@ -2,22 +2,9 @@
 
 All Notable changes to `array-filter` will be documented in this file
 
-## [Version] - YYYY-MM-DD
+## v1.0 - 2016-02-22
+
+- Initial Release
 
 ### Added
-- Nothing
-
-### Changed
-- Nothing
-
-### Fixed
-- Nothing
-
-### Deprecated
-- Nothing
-
-### Removed
-- Nothing
-
-### Security
-- Nothing
+- Filter Collections of arrays based on configured properties

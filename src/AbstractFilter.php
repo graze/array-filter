@@ -28,7 +28,11 @@ abstract class AbstractFilter implements ArrayFilterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * @param array $data
+     *
+     * @return bool
      */
     abstract public function matches(array $data);
 }

@@ -16,7 +16,7 @@ namespace Graze\ArrayFilter;
 class AllOfFilter extends AbstractFilter
 {
     /**
-     * @var ArrayFilterInterface[]
+     * @var callable[]
      */
     private $filters;
 
@@ -31,9 +31,9 @@ class AllOfFilter extends AbstractFilter
     }
 
     /**
-     * @param ArrayFilterInterface $filter
+     * @param callable $filter
      */
-    public function addFilter(ArrayFilterInterface $filter)
+    public function addFilter(callable $filter)
     {
         $this->filters[] = $filter;
     }
@@ -48,7 +48,7 @@ class AllOfFilter extends AbstractFilter
     public function matches(array $data)
     {
         foreach ($this->filters as $filter) {
-            if (!$filter->matches($data)) {
+            if (!$filter($data)) {
                 return false;
             }
         }
