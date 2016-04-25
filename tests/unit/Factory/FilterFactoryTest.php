@@ -56,7 +56,7 @@ class FilterFactoryTest extends TestCase
      * @param array  $metadata
      * @param bool   $result
      */
-    public function testGetFilter($property, $expected, $metadata, $result)
+    public function testGetFilter($property, $expected, array $metadata, $result)
     {
         if (is_string($expected)) {
             $this->valueFactory->shouldReceive('parseValue')

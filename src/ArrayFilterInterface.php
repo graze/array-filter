@@ -16,6 +16,15 @@ namespace Graze\ArrayFilter;
 interface ArrayFilterInterface
 {
     /**
+     * All Implementations should be invokable
+     *
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function __invoke(array $data);
+
+    /**
      * Does this filter match?
      *
      * @param array $data Array data

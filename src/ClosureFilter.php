@@ -13,8 +13,6 @@
 
 namespace Graze\ArrayFilter;
 
-use Closure;
-
 class ClosureFilter extends AbstractFilter
 {
     /**
@@ -23,15 +21,15 @@ class ClosureFilter extends AbstractFilter
     private $property;
 
     /**
-     * @var Closure
+     * @var callable
      */
     private $function;
 
     /**
-     * @param string  $property
-     * @param Closure $function ($value) -> bool
+     * @param string   $property
+     * @param callable $function ($value) -> bool
      */
-    public function __construct($property, Closure $function)
+    public function __construct($property, callable $function)
     {
         $this->property = $property;
         $this->function = $function;

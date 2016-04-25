@@ -75,6 +75,18 @@ class AllOfFilterTest extends TestCase
         static::assertFalse($filter->matches(['test' => 'bar']));
     }
 
+    public function testCallableFilters()
+    {
+        $filter = new AllOfFilter([
+            function (array $data) {
+                return isset($data['test']) && $data['test'] == 'value';
+            }
+        ]);
+        static::assertTrue($filter(['test' => 'value']));
+        static::assertFalse($filter(['test' => 'values']));
+        static::assertFalse($filter(['tests' => 'values']));
+    }
+
     public function testAllOfFilterCanBeInvoked()
     {
         $filter = new AllOfFilter([

@@ -17,6 +17,13 @@ use Exception;
 
 class UnknownPropertyDefinitionException extends Exception
 {
+    /**
+     * UnknownPropertyDefinitionException constructor.
+     *
+     * @param string         $property
+     * @param string         $message
+     * @param Exception|null $previous
+     */
     public function __construct($property, $message = '', Exception $previous = null)
     {
         $message = "Unknown property definition: $property. " . $message;

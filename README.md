@@ -41,13 +41,15 @@ $filter = $factory->createFilters($config);
 $filtered = array_filter($input, $filter);
 ```
 
-### Respect/Validator Compatible
+### Respect/Validator and other callable functions Compatible
 
-```php
+```
 $filter = new AllOfFilter();
-$filter->addFilter('name', v::regex('/test.*/i'))
-       ->addFilter('ctime', v::date()->between('yesterday', 'today'))
-       ->addFilter('status', v::in([1, 2]));
+$filter->addFilter(new ClosureFilter('name', v::regex('/test.*/i')))
+       ->addFilter(v::key('ctime', v::date()->between('yesterday', 'today'))
+       ->addFilter(function (array $data) {
+           return isset($data['status']) && in_array($data['status'], [1, 2]);
+       });
 
 $filtered = array_filter($input, $filter);
 ```

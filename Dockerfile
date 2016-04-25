@@ -1,5 +1,7 @@
 FROM php:5.6-cli
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && apt-get install -y zip unzip gzip libc6 php5-xdebug --no-install-recommends && rm -r /var/lib/apt/lists/*
 
 RUN docker-php-ext-install mbstring \
