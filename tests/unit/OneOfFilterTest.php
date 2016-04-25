@@ -77,7 +77,7 @@ class OneOfFilterTest extends TestCase
         static::assertTrue($filter->matches(['test' => 'bar']));
     }
 
-    public function testCallableFilters()
+    public function testCallableFiltersMatchesOne()
     {
         $filter = new OneOfFilter([
             function (array $data) {
